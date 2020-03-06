@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Rounded loading</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="wrapper">
+                <div class="card">
+                    <div class="box">
+                        <div class="percent">
+                            <svg>
+                                <circle cx="70" cy="70" r="70"></circle>
+                                <circle style="stroke: #00ff43" cx="70" cy="70" r="70"></circle>
+                            </svg>
+                            <div class="number">
+                                <h2>10</h2><span>%</span>
+                            </div>
+                        </div>
+                        <div class="text">Html</div>
+                    </div>
+                </div>
+                <div class="form">
+                    <form>
+                        <input type="number" min="0" max="100" value="10" dataFormNum="0">
+                    </form>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="card">
+                    <div class="box">
+                        <div class="percent">
+                            <svg>
+                                <circle cx="70" cy="70" r="70"></circle>
+                                <circle style="stroke: #00a1ff" cx="70" cy="70" r="70"></circle>
+                            </svg>
+                            <div class="number">
+                                <h2>10</h2><span>%</span>
+                            </div>
+                        </div>
+                        <div class="text">Css</div>
+                    </div>
+                </div>
+                <div class="form">
+                    <form>
+                        <input type="number" min="0" max="100" value="10" dataFormNum="1">
+                    </form>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="card">
+                    <div class="box">
+                        <div class="percent">
+                            <svg>
+                                <circle cx="70" cy="70" r="70"></circle>
+                                <circle style="stroke: #ff04f7" cx="70" cy="70" r="70"></circle>
+                            </svg>
+                            <div class="number">
+                                <h2>10</h2><span>%</span>
+                            </div>
+                        </div>
+                        <div class="text">Javascript</div>
+                    </div>
+                </div>
+                <div class="form">
+                    <form>
+                        <input type="number" min="0" max="100" value="10" dataFormNum="2">
+                    </form>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="card">
+                    <div class="box">
+                        <div class="percent">
+                            <svg>
+                                <circle cx="70" cy="70" r="70"></circle>
+                                <circle style="stroke: #04d9ff" cx="70" cy="70" r="70"></circle>
+                            </svg>
+                            <div class="number">
+                                <h2>10</h2><span>%</span>
+                            </div>
+                        </div>
+                        <div class="text">Javascript</div>
+                    </div>
+                </div>
+                <div class="form">
+                    <form>
+                        <input type="number" min="0" max="100" value="10" dataFormNum="3">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        var forms = document.querySelectorAll("form")
+        for (let form of forms) {
+            form.addEventListener("keydown",(event)=>{
+                if(event.key == "Enter"){
+                    event.preventDefault()
+                    var formNum = parseInt(event.target.attributes[4].value, 10)
+                    setPorcentagem(event, formNum)
+                }
+            })
+            
+            form.firstChild.nextSibling.addEventListener("change", (event) => {
+                event.preventDefault()
+                var formNum = parseInt(event.target.attributes[4].value, 10)
+                setPorcentagem(event, formNum)
+            })
+            
+        }
+
+        function setPorcentagem(event, numeroDoCirculo){
+            var cards = document.querySelectorAll('.card')
+            var circle = cards[numeroDoCirculo].querySelectorAll('circle')[1]
+            var porcentagem = event.target.parentNode.firstChild.nextSibling.valueAsNumber
+                porcentagem > 100 ? porcentagem = 100 : 0
+                porcentagem < 0 ? porcentagem = 0 : 0
+
+            var stringNumAtualImpresso = cards[numeroDoCirculo].querySelector('h2')
+            var numAtualImpresso = parseInt(stringNumAtualImpresso.innerHTML, 10)
+            
+            var valorIncremento = porcentagem - numAtualImpresso
+            var velocidadeDaAnimacao = 25
+            var tempoDeTransicaoDaAnimacao = (Math.abs(valorIncremento) * velocidadeDaAnimacao) + "ms"
+            circle.style.transitionDuration = tempoDeTransicaoDaAnimacao
+            circle.style.strokeDashoffset = 440 - (440 * porcentagem) / 100
+            /// Fator define o quando a porcentagem ira crescer ou decrescer
+            var fator = valorIncremento < 0 ? -1 : 1
+
+            setInterval(function () {
+                if(valorIncremento != 0){
+                    numAtualImpresso = numAtualImpresso + fator
+                    stringNumAtualImpresso.innerHTML = numAtualImpresso
+                    fator < 0 ? valorIncremento++ : valorIncremento--
+                } else {
+                    clearInterval()
+                }
+            }, velocidadeDaAnimacao)
+            event.target.value = porcentagem
+        }
+    </script>
+</html>
